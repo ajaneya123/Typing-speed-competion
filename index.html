@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Typing Speed Tester</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 Welcome to the Typing Speed Tester 🧠</h1>
+    <p id="sentence">I love to learn python</p>
+    <p>Your time will start when you click the button below.</p>
+    <button onclick="startTyping()">Start</button>
+
+    <div id="typingArea" style="display:none;">
+      <textarea id="userInput" placeholder="Type the sentence here..."></textarea>
+      <button onclick="checkTyping()">Done</button>
+    </div>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
