@@ -1,4 +1,3 @@
-// Sentence pool for randomness (optional, can keep just one sentence)
 const sentences = [
   "I love to learn python",
   "JavaScript is a powerful language",
@@ -11,16 +10,24 @@ let sentence = "";
 let startTime = null;
 
 function startTyping() {
-  // Pick a random sentence
   sentence = sentences[Math.floor(Math.random() * sentences.length)];
-
   document.getElementById("typingArea").style.display = "block";
   document.getElementById("result").innerHTML = "";
   document.getElementById("userInput").value = "";
   document.getElementById("sentenceToType").innerText = sentence;
   startTime = new Date();
-  document.getElementById("checkBtn").disabled = false; // Enable button if disabled
+  document.getElementById("checkBtn").disabled = false;
+  // Optional: Disable start button if needed
+  // document.getElementById("startBtn").disabled = true;
 }
+
+// Prevent form submission on Enter key in the input field
+document.getElementById("userInput").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("checkBtn").click();
+  }
+});
 
 function checkTyping() {
   if (!startTime) {
@@ -30,13 +37,15 @@ function checkTyping() {
 
   const endTime = new Date();
   const typed = document.getElementById("userInput").value;
+  if (!typed.trim()) {
+    document.getElementById("result").innerHTML = "<p class='wrong'>❌ Please type the sentence above before checking! ❌</p>";
+    return;
+  }
   const timeTaken = Math.max((endTime - startTime) / 1000, 0.01).toFixed(2);
 
-  // Count words in user input for WPM calculation
   const wordsTyped = typed.trim().split(/\s+/).filter(Boolean).length;
   const wpm = ((wordsTyped / timeTaken) * 60).toFixed(2);
 
-  // More forgiving accuracy check
   const normalize = str => str.trim().replace(/\s+/g, " ").toLowerCase();
   let accuracyMessage = "";
   if (normalize(typed) === normalize(sentence)) {
@@ -51,6 +60,8 @@ function checkTyping() {
     <p>💨 Your typing speed: ${wpm} words per minute (WPM)</p>
   `;
 
-  startTime = null; // Reset so user can't check again without starting
-  document.getElementById("checkBtn").disabled = true; // Disable button to prevent double submissions
+  startTime = null;
+  document.getElementById("checkBtn").disabled = true;
+  // Optional: Enable start button for another try
+  // document.getElementById("startBtn").disabled = false;
 }
