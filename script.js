@@ -1,67 +1,33 @@
-const sentences = [
-  "I love to learn python",
-  "JavaScript is a powerful language",
-  "Practice makes perfect",
-  "Typing fast is a useful skill",
-  "GitHub helps developers collaborate"
-];
+const sentence = "I love to learn python";
+console.log("🧠Welcome to the typing speed tester🧠");
+console.log("Type the following sentence:");
+console.log(sentence);
+console.log("Your time will start when you press Enter key");
 
-let sentence = "";
-let startTime = null;
-
-function startTyping() {
-  sentence = sentences[Math.floor(Math.random() * sentences.length)];
-  document.getElementById("typingArea").style.display = "block";
-  document.getElementById("result").innerHTML = "";
-  document.getElementById("userInput").value = "";
-  document.getElementById("sentenceToType").innerText = sentence;
-  startTime = new Date();
-  document.getElementById("checkBtn").disabled = false;
-  // Optional: Disable start button if needed
-  // document.getElementById("startBtn").disabled = true;
-}
-
-// Prevent form submission on Enter key in the input field
-document.getElementById("userInput").addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("checkBtn").click();
-  }
+const readline = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout
 });
 
-function checkTyping() {
-  if (!startTime) {
-    document.getElementById("result").innerHTML = "<p class='wrong'>❌ Please start the test first! ❌</p>";
-    return;
-  }
+readline.question("Press Enter to start...", () => {
+    const startTime = Date.now();
 
-  const endTime = new Date();
-  const typed = document.getElementById("userInput").value;
-  if (!typed.trim()) {
-    document.getElementById("result").innerHTML = "<p class='wrong'>❌ Please type the sentence above before checking! ❌</p>";
-    return;
-  }
-  const timeTaken = Math.max((endTime - startTime) / 1000, 0.01).toFixed(2);
+    readline.question("Type here: ", (typed) => {
+        const endTime = Date.now();
+        const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
 
-  const wordsTyped = typed.trim().split(/\s+/).filter(Boolean).length;
-  const wpm = ((wordsTyped / timeTaken) * 60).toFixed(2);
+        console.log(`\n⏱️ Time taken: ${timeTaken} seconds`);
 
-  const normalize = str => str.trim().replace(/\s+/g, " ").toLowerCase();
-  let accuracyMessage = "";
-  if (normalize(typed) === normalize(sentence)) {
-    accuracyMessage = `<p class="correct">✅ The sentence you typed is correct ✅</p>`;
-  } else {
-    accuracyMessage = `<p class="wrong">❌ Oops, the sentence you typed is wrong ❌</p>`;
-  }
+        if (typed === sentence) {
+            console.log("✅ The sentence you typed is correct ✅");
+        } else {
+            console.log("❌ Oops, the sentence you typed is wrong ❌");
+        }
 
-  document.getElementById("result").innerHTML = `
-    <p>⏱️ Time taken: ${timeTaken} seconds</p>
-    ${accuracyMessage}
-    <p>💨 Your typing speed: ${wpm} words per minute (WPM)</p>
-  `;
+        const words = sentence.split(" ").length;
+        const wpm = ((words / (timeTaken / 60)).toFixed(2));
 
-  startTime = null;
-  document.getElementById("checkBtn").disabled = true;
-  // Optional: Enable start button for another try
-  // document.getElementById("startBtn").disabled = false;
-}
+        console.log(`💨 Your typing speed: ${wpm} words per minute (WPM)`);
+        readline.close();
+    });
+});
