@@ -21,8 +21,12 @@ function startTyping() {
     startTime = new Date().getTime();
 }
 
-// Called when Done button is pressed
 function checkTyping() {
+    if (!currentSentence || !startTime) {
+        document.getElementById("result").innerHTML =
+            `<span style="color:red;">Please press the Start button first.</span>`;
+        return;
+    }
     endTime = new Date().getTime();
     const userInput = document.getElementById("userInput").value;
     const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
